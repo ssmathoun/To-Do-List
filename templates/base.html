@@ -1,0 +1,688 @@
+{% include "header.html" %}
+{% from "bootstrap5/form.html" import render_field %}
+
+<body class="bg-body-tertiary pt-3">
+    <div class="d-flex flex-row me-auto">
+
+        <div class="d-flex flex-column sidebar-offcanvas">
+
+            <div class="sidebar d-flex flex-column d-none d-xl-block px-3">
+                <div class="d-flex align-items-center mt-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                        class="bi bi-card-checklist" viewBox="0 0 16 16">
+                        <path
+                            d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z" />
+                        <path
+                            d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0M7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0" />
+                    </svg>
+                    <span class="mb-0 fs-4">To Do List</span>
+                </div>
+                <hr class="mb-0" />
+                <div class="h-100" style="padding-top: 0.7rem;">
+                    <ul class="sidebar-list nav nav-pills d-flex flex-column gap-2 my-2 fs-5">
+                        <li>
+
+                            <a class="nav-link sidebar-btn d-flex align-items-center"
+                                onmouseover="sidebarAddHover(this)" onmouseout="sidebarAddNotHover(this)"
+                                data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor"
+                                    class="bi bi-plus-circle me-3" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                    <path
+                                        d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                                </svg> Add
+                            </a>
+
+                        <li>
+                            {% block sidebar_all %}
+                            <a class="nav-link sidebar-btn d-flex align-items-center"
+                                onmouseover="sidebarAllHover(this)" onmouseout="sidebarAllNotHover(this)"
+                                href="{{ url_for('get_tasks') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor"
+                                    class="bi bi-house-door me-3" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4z" />
+                                </svg> All Tasks
+                            </a>
+                            {% endblock %}
+                        </li>
+                        <li>
+                            {% block sidebar_favourites %}
+                            <a class="nav-link sidebar-btn d-flex align-items-center"
+                                onmouseover="sidebarFavouritesHover(this)" onmouseout="sidebarFavouritesNotHover(this)"
+                                href="{{ url_for('get_favourites') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor"
+                                    class="bi bi-star me-3" viewBox="0 0 16 16">
+                                    <path
+                                        d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z" />
+                                </svg> Favourites
+                            </a>
+                            {% endblock %}
+                        </li>
+
+                        <li>
+                            {% block sidebar_completed %}
+                            <a class="nav-link sidebar-btn d-flex align-items-center"
+                                onmouseover="sidebarCompletedHover(this)" onmouseout="sidebarCompletedNotHover(this)"
+                                href="{{ url_for('get_completed') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor"
+                                    class="bi bi-check-square me-3" viewBox="0 0 16 16">
+                                    <path
+                                        d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                    <path
+                                        d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z" />
+                                </svg> Completed
+                            </a>
+                            {% endblock %}
+
+
+                        </li>
+
+                        {% block label_block %}
+                        {% for task in label_tasks %}
+                        <li>
+
+                            <a class="nav-link sidebar-btn d-flex align-items-center"
+                                href="{{ url_for('get_label_tasks', label=task.label) }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21"
+                                    fill="{{ (task.label_color) }}" class="bi bi-tag-fill me-3" viewBox="0 0 16 16">
+                                    <path
+                                        d="M2 1a1 1 0 0 0-1 1v4.586a 1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+                                </svg> {{ task.label }}
+                            </a>
+
+                        </li>
+                        {% endfor %}
+                        {% endblock %}
+
+                    </ul>
+
+                </div>
+
+
+            </div>
+            <div class="d-xl-none offcanvas offcanvas-start show" data-bs-scroll="true" data-bs-backdrop="false"
+                tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel"
+                style="background-color: #00308F; color: white; width:280px;">
+                <div class="offcanvas-header">
+                    <div class="d-flex align-items-center mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                            class="bi bi-card-checklist me-3" viewBox="0 0 16 16">
+                            <path
+                                d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z" />
+                            <path
+                                d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0M7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0" />
+                        </svg>
+                        <span class="mb-0 fs-4">To Do List</span>
+                    </div>
+                </div>
+                <div class="offcanvas-body">
+
+                    <ul class="nav nav-pills d-flex flex-column gap-2 my-2 fs-5">
+                        <li>
+
+                            <a class="nav-link sidebar-btn d-flex align-items-center"
+                                onmouseover="sidebarAddHover(this)" onmouseout="sidebarAddNotHover(this)"
+                                data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor"
+                                    class="bi bi-plus-circle me-3" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                    <path
+                                        d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                                </svg> Add
+                            </a>
+
+                        <li>
+                            {% block offcanvas_all %}
+                            <a class="nav-link sidebar-btn d-flex align-items-center"
+                                onmouseover="sidebarAllHover(this)" onmouseout="sidebarAllNotHover(this)"
+                                href="{{ url_for('get_tasks') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor"
+                                    class="bi bi-house-door me-3" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4z" />
+                                </svg> All Tasks
+                            </a>
+                            {% endblock %}
+                        </li>
+                        <li>
+                            {% block offcanvas_favourites %}
+                            <a class="nav-link sidebar-btn d-flex align-items-center"
+                                onmouseover="sidebarFavouritesHover(this)" onmouseout="sidebarFavouritesNotHover(this)"
+                                href="{{ url_for('get_favourites') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor"
+                                    class="bi bi-star me-3" viewBox="0 0 16 16">
+                                    <path
+                                        d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z" />
+                                </svg> Favourites
+                            </a>
+                            {% endblock %}
+                        </li>
+
+                        <li>
+                            {% block offcanvas_completed %}
+                            <a class="nav-link sidebar-btn d-flex align-items-center"
+                                onmouseover="sidebarCompletedHover(this)" onmouseout="sidebarCompletedNotHover(this)"
+                                href="{{ url_for('get_completed') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor"
+                                    class="bi bi-check-square me-3" viewBox="0 0 16 16">
+                                    <path
+                                        d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                    <path
+                                        d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z" />
+                                </svg> Completed
+                            </a>
+                            {% endblock %}
+
+
+                        </li>
+                        {% block offcanvas_label_block %}
+                        {% for task in label_tasks %}
+                        <li>
+
+                            <a class="nav-link sidebar-btn d-flex align-items-center"
+                                href="{{ url_for('get_label_tasks', label=task.label) }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21"
+                                    fill="{{ (task.label_color) }}" class="bi bi-tag-fill me-3" viewBox="0 0 16 16">
+                                    <path
+                                        d="M2 1a1 1 0 0 0-1 1v4.586a 1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+                                </svg> {{ task.label }}
+                            </a>
+
+                        </li>
+                        {% endfor %}
+                        {% endblock %}
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="content d-flex flex-column">
+
+            <div class="d-flex align-items-center justify-content-end mb-4">
+                <a href="{{ url_for('logout')}}" class="btn btn-light me-2">Log Out</a>
+
+
+                <button type="button" class="btn btn-light" data-bs-toggle="dropdown" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
+                        class="bi bi-arrow-down-up" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5" />
+                    </svg>
+                </button>
+
+
+                <div class="dropdown">
+
+                    <ul class="dropdown-menu">
+                        <li>
+                            <h6 class="dropdown-header">Sort By</h6>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        {% block sort %}
+                        {% endblock %}
+                    </ul>
+                </div>
+
+                <button type="button" class="btn btn-light d-flex d-xl-none pt-1" style="h" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvas" aria-controls="offcanvas">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
+                        class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title fs-5" id="staticBackdropLabel">Add Task</h2>
+                            {% block add_content %}{% endblock %}
+                        </div>
+                        <form id="add_form" method="POST" action="{{ url_for('add_task') }}" novalidate>
+                            <div class="modal-body">
+                                {{ form.csrf_token }}
+                                {{ render_field(form.task, novalidate=true, id="task_input", form_type="inline",
+                                class="form-control",
+                                placeholder="Task Name") }}
+
+                                <div class="d-flex flex-row">
+                                    <div class="d-flex flex-column me-3">
+                                        <div>
+                                            <input id="due_date" name="due_date" type="checkbox" class="form-control"
+                                                style="opacity: 0%;">
+                                        </div>
+                                        <label for="due_date">
+                                            <span class="add_icons btn btn-outline-secondary" id="due_date_btn"
+                                                style="position: relative; top: -13px;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="currentColor" class="bi bi-calendar2-plus" id="due_date_svg"
+                                                    viewBox="0 0 16 16" style="margin-left: 1px;">
+                                                    <path
+                                                        d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"
+                                                        id="due_date_path1" />
+                                                    <path
+                                                        d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5zM8 8a.5.5 0 0 1 .5.5V10H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V11H6a.5.5 0 0 1 0-1h1.5V8.5A.5.5 0 0 1 8 8"
+                                                        id="due_date_path2" />
+                                                </svg>
+                                                <span id="due_date_text">Due Date</span>
+                                            </span>
+
+                                        </label>
+
+                                    </div>
+                                    <div class="d-flex flex-column me-3">
+                                        <button class="add_icons btn btn-outline-secondary" id="favourite_btn">
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-star" id="favourite_btn_svg"
+                                                viewBox="0 0 16 16" style="margin-left: 1px;">
+                                                <path
+                                                    d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z"
+                                                    id="favourite_btn_path" />
+                                            </svg>
+                                            Favourite
+
+                                        </button>
+
+                                        <input id="favourite" name="favourite" type="checkbox" class="form-control"
+                                            style="position: absolute; left: -10000px;" />
+
+                                    </div>
+                                    <div class="d-flex flex-column me-3">
+                                        <div>
+                                            <input id="priority" name="priority" type="number" value=4
+                                                class="form-control" style="opacity: 0%; width: 100px; height: 2px;">
+                                        </div>
+
+
+                                        <button class="add_icons btn btn-outline-secondary dropdown-toggle"
+                                            id="priority_btn" role="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false" style="position: relative; top: -13px;">
+                                            <svg id="priority_svg" xmlns="http://www.w3.org/2000/svg" width="16"
+                                                height="16" fill="currentColor" class="bi bi-flag" viewBox="0 0 16 16"
+                                                style="margin-left: 1px;">
+                                                <path id="priority_path"
+                                                    d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001M14 1.221c-.22.078-.48.167-.766.255-.81.252-1.872.523-2.734.523-.886 0-1.592-.286-2.203-.534l-.008-.003C7.662 1.21 7.139 1 6.5 1c-.669 0-1.606.229-2.415.478A21 21 0 0 0 3 1.845v6.433c.22-.078.48-.167.766-.255C4.576 7.77 5.638 7.5 6.5 7.5c.847 0 1.548.28 2.158.525l.028.01C9.32 8.29 9.86 8.5 10.5 8.5c.668 0 1.606-.229 2.415-.478A21 21 0 0 0 14 7.655V1.222z" />
+                                            </svg>
+                                            <span id="priority_text">Priority</span>
+                                        </button>
+
+                                        <ul class="ul dropdown-menu">
+                                            <li class="li dropdown-item" id="no-priority" onclick="addPriority(this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="currentColor" class="bi bi-flag" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001M14 1.221c-.22.078-.48.167-.766.255-.81.252-1.872.523-2.734.523-.886 0-1.592-.286-2.203-.534l-.008-.003C7.662 1.21 7.139 1 6.5 1c-.669 0-1.606.229-2.415.478A21 21 0 0 0 3 1.845v6.433c.22-.078.48-.167.766-.255C4.576 7.77 5.638 7.5 6.5 7.5c.847 0 1.548.28 2.158.525l.028.01C9.32 8.29 9.86 8.5 10.5 8.5c.668 0 1.606-.229 2.415-.478A21 21 0 0 0 14 7.655V1.222z" />
+                                                </svg>
+                                                <span style="cursor: default;">No Priority</span>
+                                            </li>
+                                            <li class="li dropdown-item" id="priority1" onclick="addPriority(this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="red" class="bi bi-flag-fill" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
+                                                </svg>
+                                                <span style="cursor: default;">Priority 1</span>
+                                            </li>
+                                            <li class="li dropdown-item" id="priority2" onclick="addPriority(this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="orange" class="bi bi-flag-fill" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
+                                                </svg>
+                                                <span style="cursor: default;">Priority 2</span>
+                                            </li>
+                                            <li class="li dropdown-item" id="priority3" onclick="addPriority(this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="gold" class="bi bi-flag-fill" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
+                                                </svg>
+                                                <span style="cursor: default;">Priority 3</span>
+                                            </li>
+
+
+
+
+                                        </ul>
+
+
+                                    </div>
+
+                                    <div class="d-flex flex-column me-3 align-items-center">
+                                        <button class="add_icons btn btn-outline-secondary dropdown-toggle" id="label"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                                fill="currentColor" class="bi bi-tag" id="label-svg" viewBox="0 0 16 16"
+                                                style="margin-left: 1px;">
+                                                <path
+                                                    d="M6 4.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-1 0a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0" />
+                                                <path
+                                                    d="M2 1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2a1 1 0 0 1 1-1m0 5.586 7 7L13.586 9l-7-7H2z" />
+                                            </svg>
+                                            <span id="label-text">Label</span>
+
+                                        </button>
+
+
+                                        <ul class="ul dropdown-menu">
+                                            <li class="label-dropdown dropdown-item">
+                                                <label for="label-text-input" class="visually-hidden">Label Text</label>
+                                                <input id="label-text-input" name="label" type="text"
+                                                    class="form-control form-control-color h-50 m-2"
+                                                    placeholder="Enter a label" style="width: 92%;">
+
+
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input name="label-color" type="color"
+                                                        class="form-control form-control-color m-2"
+                                                        id="label-color-input" value="#212529">
+                                                    <label for="label-color-input"
+                                                        class="form-label visually-hidden">Label Color</label>
+
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    {{ render_field(form.submit) }}
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+            {% if all_tasks %}
+
+            <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false"
+                tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+
+                            <h2 class="modal-title fs-5" id="staticBackdropLabel2">Edit Task</h2>
+                            {% block edit_content %}
+                            {% endblock %}
+
+                        </div>
+                        <form id="edit_form" method="POST" action="#" novalidate>
+                            <div class="modal-body">
+                                {{ form.csrf_token }}
+                                {{ render_field(edit_form.task, novalidate=true, id="task_input", form_type="inline",
+                                class="form-control",
+                                placeholder="Task Name") }}
+
+                            </div>
+                            <div class="modal-footer">
+                                {{ render_field(edit_form.submit) }}
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+            <ul class="list-group list-group-flush ms-4 me-4">
+
+                {% for task in all_tasks %}
+                {% if task.status == "Not Complete" %}
+                <li class="list-group-item list-group-item-action px-3 py-3">
+                    {% elif task.status == "Complete" %}
+                <li class="list-group-item list-group-item-action list-group-item-success px-3 py-3">
+                    {% endif %}
+
+                    <form class="status-forms" id="status-form{{ task.id }}" method="POST"
+                        action="{{ url_for('add_status', task_id=task.id) }}" style="display: inline;">
+                        {{ form.csrf_token }}
+                        <label for="status{{ task.id }}" class="visually-hidden">Task Status</label>
+                        <input name="status" class="form-check-input me-1" type="checkbox"
+                            onchange="statusChange(this, {{ task.id }})" id="status{{ task.id }}">
+
+                    </form>
+                    {{ task.task }}
+
+                    <div class="pt-0 pb-0" style="display: inline; float: right;">
+
+                        <a class="icons link-secondary link-offset-2" data-bs-toggle="dropdown" aria-expanded="false">
+
+                            {% if task.priority == 1 %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red"
+                                class="bi bi-flag-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
+                            </svg>
+                            {% elif task.priority == 2 %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="orange"
+                                class="bi bi-flag-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
+                            </svg>
+                            {% elif task.priority == 3 %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="gold"
+                                class="bi bi-flag-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
+                            </svg>
+
+                            {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-flag" viewBox="0 0 16 16">
+                                <path
+                                    d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001M14 1.221c-.22.078-.48.167-.766.255-.81.252-1.872.523-2.734.523-.886 0-1.592-.286-2.203-.534l-.008-.003C7.662 1.21 7.139 1 6.5 1c-.669 0-1.606.229-2.415.478A21 21 0 0 0 3 1.845v6.433c.22-.078.48-.167.766-.255C4.576 7.77 5.638 7.5 6.5 7.5c.847 0 1.548.28 2.158.525l.028.01C9.32 8.29 9.86 8.5 10.5 8.5c.668 0 1.606-.229 2.415-.478A21 21 0 0 0 14 7.655V1.222z" />
+                            </svg>
+                            {% endif %}
+                        </a>
+
+                        <ul class="ul dropdown-menu">
+                            <li class="li dropdown-item p-0" id="no-priority-list">
+                                <a href="{{ url_for('add_priority', task_id=task.id, task_priority=4) }}"
+                                    class="dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                        class="bi bi-flag" viewBox="0 0 16 16">
+                                        <path
+                                            d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001M14 1.221c-.22.078-.48.167-.766.255-.81.252-1.872.523-2.734.523-.886 0-1.592-.286-2.203-.534l-.008-.003C7.662 1.21 7.139 1 6.5 1c-.669 0-1.606.229-2.415.478A21 21 0 0 0 3 1.845v6.433c.22-.078.48-.167.766-.255C4.576 7.77 5.638 7.5 6.5 7.5c.847 0 1.548.28 2.158.525l.028.01C9.32 8.29 9.86 8.5 10.5 8.5c.668 0 1.606-.229 2.415-.478A21 21 0 0 0 14 7.655V1.222z" />
+                                    </svg>
+                                    <span style="cursor: default;">No Priority</span>
+                                </a>
+                            </li>
+                            <li class="li dropdown-item p-0" id="priority1-list">
+                                <a href="{{ url_for('add_priority', task_id=task.id, task_priority=1) }}"
+                                    class="dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red"
+                                        class="bi bi-flag-fill" viewBox="0 0 16 16">
+                                        <path
+                                            d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
+                                    </svg>
+                                    <span style="cursor: default;">Priority 1</span>
+                                </a>
+                            </li>
+                            <li class="li dropdown-item p-0" id="priority2-list">
+                                <a href="{{ url_for('add_priority', task_id=task.id, task_priority=2)}}"
+                                    class="dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="orange"
+                                        class="bi bi-flag-fill" viewBox="0 0 16 16">
+                                        <path
+                                            d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
+                                    </svg>
+                                    <span style="cursor: default;">Priority 2</span>
+                                </a>
+                            </li>
+                            <li class="li dropdown-item p-0" id="priority3-list">
+                                <a href="{{ url_for('add_priority', task_id=task.id, task_priority=3) }}"
+                                    class="dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="gold"
+                                        class="bi bi-flag-fill" viewBox="0 0 16 16">
+                                        <path
+                                            d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
+                                    </svg>
+                                    <span style="cursor: default;">Priority 3</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <a href="{{ url_for('add_or_remove_favourites', task_id=task.id) }}"
+                            class="icons link-secondary link-offset-2">
+                            {% if task.is_favourite %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="gold"
+                                class="bi bi-star-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                            </svg>
+
+                            {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" onmouseover="mouseover(event)"
+                                onmouseout="mouseout(event)" width="20" height="20" fill="currentColor"
+                                class="bi bi-star" viewBox="0 0 16 16">
+                                <path
+                                    d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z" />
+                            </svg>
+                            {% endif %}
+                        </a>
+
+                        <a class="icons edit-icon link-offset-2" data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop2"
+                            onclick="showModal({{ task.id }}, '{{ url_for('edit_task_name', task_id=task.id) }}')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                <path
+                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                <path fill-rule="evenodd"
+                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                            </svg>
+                        </a>
+
+
+                        <a href="{{ url_for('delete_task', task_id=task.id) }}" class="icons delete-icon link-offset-2">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-trash" viewBox="0 0 16 16">
+                                <path
+                                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                <path
+                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="d-flex flex-row" style="margin-top: 2px;">
+                        <form id="date-form{{ task.id }}" method="POST"
+                            action="{{ url_for('edit_due_date', task_id=task.id) }}" novalidate>
+
+                            {{ form.csrf_token }}
+                            <input type="checkbox" name="new-due-date" id="date-picker{{ task.id }}"
+                                class="visually-hidden">
+                            <label for="date-picker{{ task.id }}" class="list-btn btn btn-sm ms-3"
+                                id="due-date-btn-list" onclick="initDatePicker({{ task.id }})">
+                                {% if task.due_date is none %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+                                    class="bi bi-calendar2-plus m-0" id="due-date-svg-list" viewBox="0 0 16 16">
+                                    <path
+                                        d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"
+                                        id="due_date_path1" />
+                                    <path
+                                        d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5zM8 8a.5.5 0 0 1 .5.5V10H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V11H6a.5.5 0 0 1 0-1h1.5V8.5A.5.5 0 0 1 8 8"
+                                        id="due_date_path2" />
+                                </svg>
+
+                                {% else %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="#0D6EFD"
+                                    class="bi bi-calendar2-plus-fill" viewBox="0 0 16 16" style="margin-left: 1px;">
+                                    <path
+                                        d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 3.5v1c0 .276.244.5.545.5h10.91c.3 0 .545-.224.545-.5v-1c0-.276-.244-.5-.546-.5H2.545c-.3 0-.545.224-.545.5m6.5 5a.5.5 0 0 0-1 0V10H6a.5.5 0 0 0 0 1h1.5v1.5a.5.5 0 0 0 1 0V11H10a.5.5 0 0 0 0-1H8.5z" />
+                                </svg>
+                                <span id="due-date-text-list">Due {{ task.due_date }}</span>
+                                {% endif %}
+                            </label>
+                        </form>
+
+
+
+                        <div data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                            <button type="button" class="list-btn btn btn-sm" style="height: 22px;">
+
+                                {% if task.label is none %}
+                                <svg xmlns="http://www.w3.org/2000/svg" id="label-svg{{ task.id }}" width="15"
+                                    height="15" fill="currentColor" class="bi bi-tag m-0" viewBox="0 0 16 16">
+                                    <path
+                                        d="M6 4.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-1 0a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0" />
+                                    <path
+                                        d="M2 1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2a1 1 0 0 1 1-1m0 5.586 7 7L13.586 9l-7-7H2z" />
+                                </svg>
+                                {% else %}
+                                <svg xmlns="http://www.w3.org/2000/svg" id="label-svg{{ task.id }}" width="15"
+                                    height="15" fill="{{ task.label_color }}" class="bi bi-tag ms-0"
+                                    viewBox="0 0 16 16">
+                                    <path
+                                        d="M6 4.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-1 0a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0" />
+                                    <path
+                                        d="M2 1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2a1 1 0 0 1 1-1m0 5.586 7 7L13.586 9l-7-7H2z" />
+                                </svg>
+                                <span id="label-text{{ task.id }}">{{ task.label }}</span>
+                                {% endif %}
+                            </button>
+                        </div>
+                        <form method="POST" action="{{ url_for('add_label', task_id=task.id) }}"
+                            class="dropdown-menu p-2" novalidate>
+                            {{ form.csrf_token }}
+                            <label for="label-text-list" class="visually-hidden">Label Text In List</label>
+                            {% if task.label is none %}
+                            <input id="label-text-list" name="label-in-list" type="text"
+                                class="form-control form-control-color h-50 m-2" placeholder="Enter a label"
+                                style="width: 92%;">
+                            {% else %}
+                            <input id="label-text-list2" name="label-in-list" type="text" value="{{ task.label }}"
+                                class="form-control form-control-color h-50 m-2" placeholder="Enter a label"
+                                style="width: 92%;">
+
+                            {% endif %}
+                            <div class="d-flex gap-5 px-2">
+
+                                {% if task.label is none %}
+                                <input name="label-color-list" type="color" class="form-control form-control-color"
+                                    id="label-color-input-list" value="#212529">
+                                {% else %}
+
+                                <input name="label-color-list" type="color" class="form-control form-control-color"
+                                    id="label-color-input-list2" value="{{ task.label_color }}">
+                                {% endif %}
+                                <label for="label-color-input-list" class="form-label visually-hidden">Label color in
+                                    list</label>
+
+                                <button type="submit" class="btn btn-sm btn-primary">Update Label</button>
+                            </div>
+                        </form>
+
+
+
+
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+
+            {% else %}
+            <p class="d-flex align-self-center fs-2 fw-bold">No tasks added</p>
+            {% endif %}
+
+        </div>
+    </div>
+
+    {{ bootstrap.load_js() }}
+    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker.min.js"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
+    {% block script %} {% endblock %}
+
+</body>
+
+</html>

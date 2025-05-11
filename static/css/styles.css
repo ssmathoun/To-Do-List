@@ -1,0 +1,130 @@
+body {
+    padding-top: 60px;
+}
+
+@media (max-width: 979px) {
+    body {
+        padding-top: 0px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .sidebar {
+        position: fixed;
+        width: 16%;
+        height: 100vh;
+        top: 0;
+        color: white;
+        background-color: #00308F;
+        padding: 1.5%;
+    }
+}
+
+ @media (min-width: 1200px) {
+    .sidebar-offcanvas {
+        width: 16%;
+    }
+}
+
+@media (max-width: 1200px) {
+    .sidebar-offcanvas {
+        width: 0%;
+    }
+}
+
+.welcome-side{
+        width: 50%;
+        height: 100vh;
+        color: white;
+        background: linear-gradient(90deg,rgba(1, 20, 61, 1) 0%, rgba(0, 48, 143, 1) 85%);
+        padding: 1.5%;
+    }
+
+.sidebar-btn {
+    color: white;
+}
+
+.sidebar-btn:hover {
+    background-color: #012169;
+    color: white;
+}
+
+.current {
+    background-color: #012169;
+}
+
+@media (max-width: 1200px) {
+    .content {
+        margin: 1% 2%;
+        width: 100%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .content {
+        width: 80%;
+    }
+}
+
+ .icons {
+    display: inline-block;
+    text-decoration: None;
+    --bs--btn-padding-y: .25rem;
+    --bs-btn-padding-x: .5rem;
+    --bs-btn-font-size: .50rem;
+    --bs--btn-margin-y: .50rem;
+ }
+
+ .favourite-selected {
+    display: inline-block;
+ }
+
+ .delete-icon {
+    color: #6c757d;
+ }
+ .delete-icon:hover {
+    color: red;
+    text-decoration: none;
+ }
+
+svg {
+    margin: 0px 8px;
+}
+
+.add_icons {
+    width: 104px;
+    height: 29px;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    padding: 4% 8%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.list-btn {
+    height: 22px;
+    width: auto;
+    margin-bottom: 0;
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.edit-icon {
+    color: #6C757D;
+}
+
+.edit-icon:hover {
+    color: #0D6EFD;
+    text-decoration: none;
+}
+
+.label-dropdown:active {
+    background-color: transparent;
+}
