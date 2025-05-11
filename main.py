@@ -8,10 +8,13 @@ from functools import wraps
 from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import email_validator
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "zpo7810340d9dcc566bb725297b92a45"
+app.config["SECRET_KEY"] = os.environ.get('FLASK_KEY')
 bootstrap = Bootstrap5(app)
 
 login_manager = LoginManager()
@@ -26,7 +29,7 @@ def load_user(user_id):
 class Base(DeclarativeBase):
     pass
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI", "sqlite:///posts.db")
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
@@ -207,11 +210,8 @@ def get_tasks():
     for task in tasks:
         if task.label and task.label not in labels:
             labeled_tasks.append(task)
-            print (task.label)
             labels.append(task.label)
 
-        print (labeled_tasks)
-        print(labels)
     return render_template("index.html", current_user=current_user, label_tasks=labeled_tasks, all_tasks=tasks, form=add_form, edit_form=edit_form)
 
 
@@ -331,7 +331,6 @@ def add_task():
     add_form = AddTaskForm()
 
     if add_form.validate_on_submit():
-        print(add_form.task.data)
 
         is_favourite = "favourite" in request.form
         due_date = request.form.get("due_date")
@@ -351,12 +350,6 @@ def add_task():
         if due_date is None or due_date.strip() == "":
             due_date = None
 
-        print(is_favourite)
-        print(due_date)
-        print(priority)
-        print(label)
-        print(label_color)
-
         if is_favourite:
             new_task = Task(task=add_form.task.data, is_favourite=is_favourite, due_date=due_date, priority=priority,
                             label=label, label_color=label_color, user=user)
@@ -364,9 +357,6 @@ def add_task():
             new_task = Task(task=add_form.task.data, due_date=due_date, priority=priority,
                             label=label, label_color=label_color, user=user)
 
-        # priority = Task(task=add_form.priority.data)
-        # tag = Task(task=add_form.tag.data)
-        # status = Task(task=add_form.status.data)
         db.session.add(new_task)
         db.session.commit()
         return redirect(url_for("get_tasks"))
@@ -389,7 +379,6 @@ def edit_task_name(task_id):
 
     if edit_form.validate_on_submit():
         task_to_update = db.get_or_404(Task, task_id)
-        print(edit_form.task.data)
         task_to_update.task = edit_form.task.data
         db.session.commit()
         return redirect(url_for("get_tasks"))
@@ -467,7 +456,6 @@ def add_priority(task_id, task_priority):
     Returns:
         Response: The main HTML page with user's tasks.
     """
-    print(task_priority)
     priority = db.get_or_404(Task, task_id)
     priority.priority = task_priority
     db.session.commit()
@@ -498,9 +486,6 @@ def add_label(task_id):
         label_str = None
         label_color_str = None
 
-    print(label_str)
-    print(all_labels)
-    print(all_labels_colors)
     same_label_tasks = db.session.execute(db.select(Task).where(Task.user == current_user,  Task.label == label_str)).scalars()
 
     for task in same_label_tasks:
@@ -526,7 +511,6 @@ def add_status(task_id):
     """
     status = db.get_or_404(Task, task_id)
     new_status = request.form.get("status")
-    print(request.form.get("status"))
     if new_status == "on":
         new_status = "Complete"
     else:
@@ -610,10 +594,7 @@ def get_label_tasks(label):
     for task in tasks:
         if task.label and task.label not in labels:
             labeled_tasks.append(task)
-            print(task.label)
             labels.append(task.label)
-
-    print(labeled_tasks)
 
     return render_template("label.html", label_tasks=labeled_tasks, all_tasks=one_label_tasks, form=add_form, edit_form=edit_form)
 

@@ -38,16 +38,16 @@ class RegisterForm(FlaskForm):
         password (PasswordField) -- New password of a user.
         submit (SubmitField) -- Submit Button to register a user.
     """
-    email = EmailField("Email",
+    email = EmailField(label="Email",
                        validators=[DataRequired(), Length(max=100), Email("Valid Email is Required.")],
                        render_kw={"class": "form-control form-control-lg",
                                   "style": "width: 25vw;"})
-    password = PasswordField("Password",
+    password = PasswordField(label="Password",
                              validators=[DataRequired(), Length(max=100)],
                              render_kw={"class": "form-control form-control-lg",
                                         "style": "width: 25vw;"})
 
-    submit = SubmitField("Register",
+    submit = SubmitField(label="Register",
                          render_kw={"style": "width: 25vw; background-color: #00308F;"})
 
 
@@ -60,15 +60,15 @@ class LoginForm(FlaskForm):
         password (PasswordField) -- Password of a user.
         submit (SubmitField) -- Submit Button to log in a user.
     """
-    email = EmailField("Email",
+    email = EmailField(label="Email",
                        validators=[DataRequired(), Length(max=100), Email(message="Valid Email is Required.")],
                        render_kw = {"class": "form-control form-control-lg",
                                     "style": "width: 25vw;"})
-    password = PasswordField("Password",
+    password = PasswordField(label="Password",
                              validators=[DataRequired(), Length(max=100)],
                              render_kw = {"class": "form-control form-control-lg",
                                           "style": "width: 25vw;"})
 
 
-    submit = SubmitField("Log In",
+    submit = SubmitField(label="Log In",
                          render_kw = {"style": "width: 25vw; background-color: #00308F;"})
