@@ -123,7 +123,7 @@ def register():
         result = db.session.execute(db.select(User).where(User.email == form.email.data))
         user = result.scalar()
         if user:
-            flash("You've already signed up with that email, log in instead!")
+            flash("You've already registered with that email, log in instead.")
             return redirect(url_for('login'))
 
         password = generate_password_hash(
@@ -600,4 +600,4 @@ def get_label_tasks(label):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    app.run(debug=False)
