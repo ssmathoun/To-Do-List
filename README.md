@@ -63,6 +63,7 @@ pip install -r requirements.txt
 
 5. Set Up ```.env``` file
 ```bash
+FLASK_APP=main.py
 FLASK_KEY=your_secret_key
 DB_URI=sqlite:///tasks.db
 ```
