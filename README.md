@@ -1,7 +1,6 @@
 # To Do List
 A To Do List web application to manage and organize user's tasks.  
 
-- Link to Website: https://to-do-list-2ksf.onrender.com
 - Run Website Locally: [Local Setup](#local-setup)
 
 ## Technologies Used 
